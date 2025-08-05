@@ -4,6 +4,7 @@ using Biblioteca.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biblioteca.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250805164736_Ajustando")]
+    partial class Ajustando
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,6 +76,9 @@ namespace Biblioteca.Migrations
                     b.Property<decimal>("PrecoUnitario")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("ProdutoId")
+                        .HasColumnType("int");
+
                     b.Property<int>("QuantidadeVendida")
                         .HasColumnType("int");
 
@@ -81,7 +87,7 @@ namespace Biblioteca.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProduto");
+                    b.HasIndex("ProdutoId");
 
                     b.ToTable("Vendas", (string)null);
                 });
@@ -90,9 +96,7 @@ namespace Biblioteca.Migrations
                 {
                     b.HasOne("Biblioteca.Models.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("IdProduto")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProdutoId");
 
                     b.Navigation("Produto");
                 });

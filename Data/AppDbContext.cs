@@ -10,8 +10,15 @@ namespace Biblioteca.Data
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions options) : base(options) { }
-        public DbSet<Livraria> Livraria { get; set; }
+        public DbSet<Produto> Produtos { get; set; }
         public DbSet<Vendas> Vendas { get; set; }
-        
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        }
+
     }
+
+
 }

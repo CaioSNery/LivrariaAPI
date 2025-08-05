@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Biblioteca.Data;
+using Biblioteca.Dtos;
+using Biblioteca.Interfaces;
 using Biblioteca.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,67 +15,40 @@ namespace Biblioteca.Controllers
     [Route("api/[controller]")]
     public class VendasController : ControllerBase
     {
-        private readonly AppDbContext _appDbContext;
-        public VendasController(AppDbContext appDbContext)
+        private readonly IVendaService _service;
+        public VendasController(IVendaService service)
         {
-            _appDbContext = appDbContext;
+            _service = service;
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> BuscarVendaPorId(int id)
+        {
+            var resultado = await _service.BuscarVendaPorIdAsync(id);
+            if (resultado == null) return NotFound("Venda não encontrada!");
+
+            return Ok(resultado);
         }
 
-        [HttpPost("{id}")]
-        public IActionResult RealizarVendas(int id, [FromBody] VendaDTO dto)
-        {
-            var livros = _appDbContext.Livraria.FirstOrDefault(l => l.Id == dto.LivrariaId);
-            if (livros == null)
-            {
-                return NotFound();
-            }
-
-            if (livros.Estoque < dto.Quantidade)
-            {
-                return BadRequest("Produto sem Estoque");
-            }
-
-            decimal valorUnitario = livros.ValorVenda;
-            decimal valorTotal = valorUnitario * dto.Quantidade;
-            
-
-
-            var vendas = new Vendas
-            {
-                IdProduto = livros.Id,
-                NomeProduto = livros.Nome,
-                QuantidadeVendida = dto.Quantidade,
-                ValorUnitario = valorUnitario,
-                ValorTotal = valorTotal,
-                DataVenda = dto.DataVenda
-
-            };
-
-            livros.Estoque -= dto.Quantidade;
-
-            _appDbContext.Vendas.Add(vendas);
-            _appDbContext.SaveChangesAsync();
-
-            var response = new VendaResponseDTO
-            {
-                Mensagem = "Venda Realizada Com sucesso !",
-                Produto = livros.Nome,
-                QuantidadeVendida = dto.Quantidade,
-                ValorTotal = valorTotal,
-                DataVenda = dto.DataVenda
-            };
-
-            return Ok(response);
-            
-
-        }
-
-        
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Vendas>>> GetVendas()
+        public async Task<IActionResult> ListarVendas()
         {
-            var vendas = await _appDbContext.Vendas.ToListAsync();
-            return Ok(vendas);
+            var resultado = await _service.ListarVendasAsync();
+            if (resultado == null) return NotFound();
+
+            return Ok(resultado);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RealizarVenda(VendaDTO dto)
+        {
+            var resultado = await _service.RealizarVendaAsync(dto);
+            return Ok(resultado);
+
+        }
+
+
+
     }
+
+
 }

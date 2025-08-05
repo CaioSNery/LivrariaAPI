@@ -12,13 +12,13 @@ namespace Biblioteca.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Livraria",
+                name: "Produtos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Ano = table.Column<int>(type: "int", nullable: false),
                     Estoque = table.Column<int>(type: "int", nullable: false),
                     ValorCompra = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -26,7 +26,7 @@ namespace Biblioteca.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Livraria", x => x.Id);
+                    table.PrimaryKey("PK_Produtos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -35,27 +35,37 @@ namespace Biblioteca.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NomeProduto = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NomeProduto = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdProduto = table.Column<int>(type: "int", nullable: false),
+                    ProdutoId = table.Column<int>(type: "int", nullable: true),
                     QuantidadeVendida = table.Column<int>(type: "int", nullable: false),
-                    ValorUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DataVenda = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vendas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vendas_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
+                        principalTable: "Produtos",
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vendas_ProdutoId",
+                table: "Vendas",
+                column: "ProdutoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Livraria");
+                name: "Vendas");
 
             migrationBuilder.DropTable(
-                name: "Vendas");
+                name: "Produtos");
         }
     }
 }

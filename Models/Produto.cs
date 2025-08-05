@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Biblioteca.Models
 {
-    public class Livraria
+    public class Produto
     {
         public int Id { get; set; }
-        public required string Tipo { get; set; }
-        public required string Nome{ get; set; }
+        public string Tipo { get; set; }
+        public string Nome { get; set; }
         public int Ano { get; set; }
         public int Estoque { get; set; }
 

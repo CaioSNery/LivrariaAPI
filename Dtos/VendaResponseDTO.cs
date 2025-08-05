@@ -5,17 +5,12 @@ using System.Threading.Tasks;
 
 namespace Biblioteca.Models
 {
-    public class Vendas
+    public class VendaResponseDTO
     {
-        public int Id { get; set; }
+        public string Mensagem { get; set; }
         public string NomeProduto { get; set; }
-        public int IdProduto { get; set; }
-        public Produto Produto { get; set; }
         public int QuantidadeVendida { get; set; }
-
-        public decimal PrecoUnitario { get; set; }
         public decimal ValorTotal { get; set; }
         public DateTime DataVenda { get; set; } = DateTime.Now;
-
     }
 }

@@ -4,6 +4,7 @@ using Biblioteca.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biblioteca.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250805134050_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace Biblioteca.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Produtos", (string)null);
+                    b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("Biblioteca.Models.Vendas", b =>
@@ -70,8 +73,8 @@ namespace Biblioteca.Migrations
                     b.Property<string>("NomeProduto")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("PrecoUnitario")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int?>("ProdutoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuantidadeVendida")
                         .HasColumnType("int");
@@ -81,18 +84,16 @@ namespace Biblioteca.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProduto");
+                    b.HasIndex("ProdutoId");
 
-                    b.ToTable("Vendas", (string)null);
+                    b.ToTable("Vendas");
                 });
 
             modelBuilder.Entity("Biblioteca.Models.Vendas", b =>
                 {
                     b.HasOne("Biblioteca.Models.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("IdProduto")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProdutoId");
 
                     b.Navigation("Produto");
                 });

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biblioteca.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250702173502_Initial")]
-    partial class Initial
+    [Migration("20250805165228_AjustesNoRelacionamento")]
+    partial class AjustesNoRelacionamento
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Biblioteca.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Biblioteca.Models.Livraria", b =>
+            modelBuilder.Entity("Biblioteca.Models.Produto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,11 +40,9 @@ namespace Biblioteca.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tipo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ValorCompra")
@@ -55,7 +53,7 @@ namespace Biblioteca.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Livraria");
+                    b.ToTable("Produtos", (string)null);
                 });
 
             modelBuilder.Entity("Biblioteca.Models.Vendas", b =>
@@ -73,8 +71,10 @@ namespace Biblioteca.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NomeProduto")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PrecoUnitario")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("QuantidadeVendida")
                         .HasColumnType("int");
@@ -82,12 +82,22 @@ namespace Biblioteca.Migrations
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("ValorUnitario")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Vendas");
+                    b.HasIndex("IdProduto");
+
+                    b.ToTable("Vendas", (string)null);
+                });
+
+            modelBuilder.Entity("Biblioteca.Models.Vendas", b =>
+                {
+                    b.HasOne("Biblioteca.Models.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produto");
                 });
 #pragma warning restore 612, 618
         }
