@@ -19,6 +19,14 @@ namespace Biblioteca.Mappings
             CreateMap<Vendas, VendaDTO>().ReverseMap();
 
             CreateMap<Vendas, VendaResponseDTO>().ReverseMap();
+
+            CreateMap<Cliente, ClienteDTO>().ReverseMap();
+
+            CreateMap<Cliente, ClienteDetalhesDTO>().ReverseMap();
+
+            CreateMap<Aluguel, AluguelDTO>().ReverseMap();
+
+            CreateMap<Aluguel, AluguelDetalhesDTO>().ReverseMap();
         }
     }
 }

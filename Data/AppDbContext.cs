@@ -13,6 +13,10 @@ namespace Biblioteca.Data
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Vendas> Vendas { get; set; }
 
+        public DbSet<Aluguel> Alugueis { get; set; }
+
+        public DbSet<Cliente> Clientes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
