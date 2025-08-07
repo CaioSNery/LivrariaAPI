@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class VendasController : ControllerBase
