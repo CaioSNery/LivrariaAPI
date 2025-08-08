@@ -32,7 +32,7 @@ namespace Biblioteca.Services
             cliente.Cpf = upcliente.Cpf;
             cliente.Telefone = upcliente.Telefone;
 
-            _context.Clientes.Add(upcliente);
+
             await _context.SaveChangesAsync();
 
             return upcliente;

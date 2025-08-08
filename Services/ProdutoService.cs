@@ -56,7 +56,7 @@ namespace Biblioteca.Services
             produto.Ano = produtoupdate.Ano;
             produto.ValorVenda = produtoupdate.ValorVenda;
 
-            _context.Update(produtoupdate);
+
             await _context.SaveChangesAsync();
 
             return produtoupdate;
